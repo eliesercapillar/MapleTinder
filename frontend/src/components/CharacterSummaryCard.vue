@@ -15,12 +15,12 @@
         />
         <div id="black_gradient" class="absolute bottom-0 h-[30%] w-full rounded-lg bg-black-shadow-fade"/>
         <div id="character_info" class="absolute bottom-[5%] ml-2 text-white overflow-hidden">
-        <span class="font-extrabold text-sm">{{ card.character.name }}</span>
-        <div class="flex items-center text-xs">
-            <span class="font-normal">{{ card.character.level }}</span>
-            &nbsp;
-            <span class="font-normal">{{ card.character.job }}</span>
-        </div>
+            <span class="font-extrabold text-sm">{{ card.character.name }}</span>
+            <div class="flex items-center text-xs">
+                <span class="font-normal">{{ card.character.level }}</span>
+                &nbsp;
+                <span class="font-normal">{{ card.character.job }}</span>
+            </div>
         </div>
     </div>
 </template>

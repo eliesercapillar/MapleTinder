@@ -35,32 +35,34 @@ export const usePlayStore = defineStore('play', () =>
     const currentRating = ref<Rating>('Likes')
 
     const correctSelection = ref(false);
-    const shiftAnimationPending = ref(false);
+    const userHasSelected = ref(false);
 
-    let _shiftResolve: (() => void) | null = null;
+    let animResolve: (() => void) | null = null;
 
-    function startShiftAnimation(): Promise<void> {
-    // if an animation is already pending, return the same promise
-        if (shiftAnimationPending.value && _shiftResolve) {
-            return new Promise(res => {
-                const prevResolve = _shiftResolve!;
+    function playAllAnimations(): Promise<void> {
+        // If an animation is already pending, return the same promise
+        if (userHasSelected.value && animResolve) {
+            return new Promise(res =>
+            {
+                const prevResolve = animResolve!;
                 // chain: resolve once previous finished
                 const chain = () => { prevResolve(); res(); };
-                _shiftResolve = chain;
+                animResolve = chain;
             });
         }
 
-        shiftAnimationPending.value = true;
+        userHasSelected.value = true;
 
-        return new Promise<void>((resolve) => { _shiftResolve = resolve; });
+        return new Promise<void>((resolve) => { animResolve = resolve; });
     }
 
-    function completeShiftAnimation() {
-        if (_shiftResolve) {
-            _shiftResolve();
-            _shiftResolve = null;
+    function allAnimationsFinished() {
+        if (animResolve) 
+        {
+            animResolve();
+            animResolve = null;
         }
-        shiftAnimationPending.value = false;
+        userHasSelected.value = false;
     }
 
     async function initializeCards()
@@ -72,13 +74,13 @@ export const usePlayStore = defineStore('play', () =>
     async function startClassic() 
     {
         isCurrentlyPlaying.value = true;
-        await getNewCard();
+        await getNewCard(2); // Add two cards to start
     }
     
     async function startTimed() 
     { 
         isCurrentlyPlaying.value = true;
-        await getNewCard();
+        await getNewCard(2); // Add two cards to start
     }
 
     async function makeSelection(selection : 'higher' | 'lower')
@@ -89,39 +91,29 @@ export const usePlayStore = defineStore('play', () =>
             gameOver();
             return;
         }
-
-        currentScore.value++;
-        // Start shift animation and wait until components tell us it's finished
-        await startShiftAnimation();
-
-        // now safe to mutate the array
-        // keep your existing sequencing: shift then get new card
-        cards.value.shift();
-        getNewRandomRating();
-        await getNewCard();
-
-        //cards.value.shift();
-
+        await startNextRound();
     }
     
     async function startNextRound() 
     {
+        currentScore.value++;
+        await playAllAnimations();
+
         correctSelection.value = false;
         cards.value.shift();
         getNewRandomRating();
         await getNewCard();
-    }
+    }   
 
-    async function getNewCard()
+    async function getNewCard(quantity : number = 1)
     {
         // const excludeIds = cards.value.map(c => c.character.id).join(',');
         // const excludeParam = excludeIds ? `&exclude=${excludeIds}` : '';
 
-        // const url = `https://localhost:7235/api/Game/randomCard?`;
+        // const url = `https://localhost:7235/api/Game/randomCard?quantity=${quantity}`;
         // const response = await apiFetch(url);
 
-        
-        addRandomCardFromSwipeStore();
+        for (let i = 0; i < quantity; i++) addRandomCardFromSwipeStore();
     }
 
     async function verify(choice : 'higher' | 'lower') : Promise<boolean>
@@ -137,6 +129,7 @@ export const usePlayStore = defineStore('play', () =>
         isCurrentlyPlaying.value = false;
         resetCards();
         highScore.value = Math.max(highScore.value, currentScore.value);
+        currentScore.value = 0;
     }
 
     function addRandomCardFromSwipeStore()
@@ -175,7 +168,7 @@ export const usePlayStore = defineStore('play', () =>
 
 
     return {
-        shiftAnimationPending, startShiftAnimation, completeShiftAnimation,
+        userHasSelected, allAnimationsFinished,
 
         currentScore, highScore, isCurrentlyPlaying,
 

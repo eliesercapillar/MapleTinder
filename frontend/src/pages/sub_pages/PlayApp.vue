@@ -17,6 +17,7 @@
               :job="'Xenon'"
               :image-url="'https://msavatar1.nexon.net/Character/MMANDIACIHJNNOPKMBKOPNEFFFBFCPKGDBLOKKLHDCEBDCBBNEPMIOEAGBOKIGAFAOMFEEPICGIJGGMFNCIOLLEBLGPCLCJHNFAIAOBEOICGMLDFDFOLCGCHCFPIGEEAJHPOHEBINNCPAGBOJMNGCAIBFKCIKKHFIFFGCIFAHMJPECIAHFJHIJGCMLKDMPGIPGOGHLMLDDBNIMCPJFACGFPPBHNAFFDMJAANFKIKEOCOEBPMOKBLNCEJLADFCGKC.png'"
               :like-count="'5,000'"
+              :text-colour="'like'"
             />
             <div class="grid items-center justify-center w-12 h-12">
               <span class="row-[1] col-[1] z-[1] text-white text-bold text-md text-center">VS</span>
@@ -28,12 +29,13 @@
               :job="'Adele'"
               :image-url="'https://msavatar1.nexon.net/Character/LCAPKANJACELHFCMBJHENCNGLDDHEMHEGKEGEGACAGFEBIHPJPLKHOJEFKEMDEJCCLJALHLFHIGGCJGMIOEKEFLCLEMLNDNJDJLPHBEFKOKPIGHEGCPCDFIEPPOGLMJMLEKFGDKPPJHCOGKODMHCBJAMGLDDGMLDILNEICKGBBMBGKBBHFOGAKKGEAIFDHNIBHAMJPKHHNDNLKEHPHHADKJLFNKCEIEEGBPKPEOJLFHFGMJADOFKHIBEPFOOJKEN.png'"
               :like-count="'???'"
+              :text-colour="'like'"
             />
           </div>
         </div>
         <div class="p-4 flex flex-col items-center justify-center">
           <span>Lock in your answer by clicking the top or bottom half of the card on the right, or using the up or down arrow keys.</span>
-          <div class="flex items-center justify-center select-none">
+          <div class="flex items-center justify-center select-none gap-12">
             <InfoCharacterPlayCard 
               :type="'static'"
               :name="'ROCKOGUY'"
@@ -41,14 +43,25 @@
               :job="'Adele'"
               :image-url="'https://msavatar1.nexon.net/Character/LCAPKANJACELHFCMBJHENCNGLDDHEMHEGKEGEGACAGFEBIHPJPLKHOJEFKEMDEJCCLJALHLFHIGGCJGMIOEKEFLCLEMLNDNJDJLPHBEFKOKPIGHEGCPCDFIEPPOGLMJMLEKFGDKPPJHCOGKODMHCBJAMGLDDGMLDILNEICKGBBMBGKBBHFOGAKKGEAIFDHNIBHAMJPKHHNDNLKEHPHHADKJLFNKCEIEEGBPKPEOJLFHFGMJADOFKHIBEPFOOJKEN.png'"
               :like-count="'???'"
+              :text-colour="'like'"
             />
-            <Icon icon="mdi:arrow-up-bold-box"></Icon>
+            <div class="flex flex-col items-center justify-center gap-4">
+              <span class="text-like text-3xl">Higher!</span>
+              <div class="grid grid-rows-2 grid-cols-3 text-6xl">
+                  <Icon class="row-[1] col-[2]" icon="solar:square-alt-arrow-up-bold"></Icon>
+                  <Icon class="row-[2] col-[1]" icon="solar:square-alt-arrow-left-outline"></Icon>
+                  <Icon class="row-[2] col-[2]" icon="solar:square-alt-arrow-down-bold"></Icon>
+                  <Icon class="row-[2] col-[3]" icon="solar:square-alt-arrow-right-outline"></Icon>
+              </div>
+              <span class="text-nope text-3xl">Lower!</span>
+            </div>
           </div>
         </div>
-        <div>
+        <div class="p-4 flex flex-col items-center justify-center">
           <span>New characters will be shown as you progress, with each being compared to the previous card.</span>
+          <ShowNewCardsAnimation/>
         </div>
-        <div>
+        <div class="p-4 flex flex-col items-center justify-center">
           <span>Try to get as many correct as you can. The game ends when you get one wrong.</span>
         </div>
       </div>
@@ -66,6 +79,7 @@ import InfoCharacterPlayCard from "@/components/play_app/InfoCharacterPlayCard.v
 import PlayInfoModal from "@/components/play_app/PlayInfoModal.vue";
 import { Icon } from "@iconify/vue/dist/iconify.js";
 import { usePlayStore } from "@/stores/playStore";
+import ShowNewCardsAnimation from "@/components/play_app/ShowNewCardsAnimation.vue";
 
 const CARD_SHIFT_ANIMATION_DURATION = 0.35;
 const VS_ICON_SCALE_ANIMATION_DURATION = 0.20;

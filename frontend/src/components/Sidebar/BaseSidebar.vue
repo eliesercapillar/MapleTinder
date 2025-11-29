@@ -1,5 +1,5 @@
 <template>
-  <aside class="min-w-80 max-w-96 w-full border-r-[1px] border-border">
+  <aside class="w-96 border-r-[1px] border-border">
     <nav class="flex items-center justify-evenly py-6 h-[--sidebar-nav-h] bg-nope-gradient">
       <button 
         class="rounded-full bg-background p-3" 
